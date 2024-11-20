@@ -33,24 +33,24 @@ const github = __importStar(require("@actions/github"));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const issueMessage = core.getInput('issue-message');
-            const prMessage = core.getInput('pr-message');
+            const issueMessage = core.getInput("issue-message");
+            const prMessage = core.getInput("pr-message");
             if (!issueMessage && !prMessage) {
-                throw new Error('Action must have at least one of issue-message or pr-message set');
+                throw new Error("Action must have at least one of issue-message or pr-message set");
             }
             // Get client and context
-            const client = github.getOctokit(core.getInput('repo-token', { required: true }));
+            const client = github.getOctokit(core.getInput("repo-token", { required: true }));
             const context = github.context;
             // Do nothing if its not a pr or issue
             const isIssue = !!context.payload.issue;
             if (!isIssue && !context.payload.pull_request) {
-                console.log('The event that triggered this action was not a pull request or issue, skipping.');
+                console.log("The event that triggered this action was not a pull request or issue, skipping.");
                 return;
             }
             // Do nothing if its not their first contribution
-            console.log('Checking if its the users first contribution');
+            console.log("Checking if its the users first contribution");
             if (!context.payload.sender) {
-                throw new Error('Internal error, no sender provided by GitHub');
+                throw new Error("Internal error, no sender provided by GitHub");
             }
             const sender = context.payload.sender.login;
             const issue = context.issue;
@@ -62,16 +62,16 @@ function run() {
                 firstContribution = yield isFirstPull(client, issue.owner, issue.repo, sender, issue.number);
             }
             if (!firstContribution) {
-                console.log('Not the users first contribution');
+                console.log("Not the users first contribution");
                 return;
             }
             // Do nothing if no message set for this type of contribution
             const message = isIssue ? issueMessage : prMessage;
             if (!message) {
-                console.log('No message provided for this type of contribution');
+                console.log("No message provided for this type of contribution");
                 return;
             }
-            const issueType = isIssue ? 'issue' : 'pull request';
+            const issueType = isIssue ? "issue" : "pull request";
             // Add a comment to the appropriate place
             console.log(`Adding message: ${message} to ${issueType} ${issue.number}`);
             if (isIssue) {
@@ -79,7 +79,7 @@ function run() {
                     owner: issue.owner,
                     repo: issue.repo,
                     issue_number: issue.number,
-                    body: message
+                    body: message,
                 });
             }
             else {
@@ -88,7 +88,7 @@ function run() {
                     repo: issue.repo,
                     pull_number: issue.number,
                     body: message,
-                    event: 'COMMENT'
+                    event: "COMMENT",
                 });
             }
         }
@@ -104,7 +104,7 @@ function isFirstIssue(client, owner, repo, sender, curIssueNumber) {
             owner: owner,
             repo: repo,
             creator: sender,
-            state: 'all'
+            state: "all",
         });
         if (status !== 200) {
             throw new Error(`Received unexpected API status code ${status}`);
@@ -131,7 +131,7 @@ function isFirstPull(client, owner, repo, sender, curPullNumber, page = 1) {
             repo: repo,
             per_page: 100,
             page: page,
-            state: 'all'
+            state: "all",
         });
         if (status !== 200) {
             throw new Error(`Received unexpected API status code ${status}`);
@@ -142,7 +142,9 @@ function isFirstPull(client, owner, repo, sender, curPullNumber, page = 1) {
         for (const pull of pulls) {
             const login = (_a = pull.user) === null || _a === void 0 ? void 0 : _a.login;
             console.log(`Check PR #${pull.number}, which was done by ${login}.  (Looking for ${sender}, ${pull.number} < ${curPullNumber}, and merge ${pull.merged}.)`);
-            if (login === sender && pull.number < curPullNumber && pull.merged === true) {
+            if (login === sender &&
+                pull.number < curPullNumber &&
+                pull.merged === true) {
                 console.log(`That's a match!`);
                 return false;
             }
