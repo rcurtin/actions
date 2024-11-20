@@ -30089,7 +30089,7 @@ class PRProcessor {
                 continue;
             }
             // Add to the list of review authors we have seen.
-            if (review.state == 'APPROVED') {
+            if (review.state === 'APPROVED') {
                 // Remove the author from the list of authors who requested changes,
                 // since they have now approved.
                 requestChangesAuthors.delete(review.user.login);
