@@ -186,9 +186,13 @@ export class PRProcessor {
       }
     }
 
-    console.log(
-      `PR ${pr.number} has sufficiently old approvals from: ${Array.from(approvalAuthors)}.`
-    )
+    if (approvalAuthors.size > 0) {
+      console.log(
+        `PR ${pr.number} has sufficiently old approvals from: ${Array.from(approvalAuthors)}.`
+      )
+    } else {
+      console.log(`PR ${pr.number} doesn't have any approvals.`)
+    }
 
     // If there are any outstanding change requests from maintainers, don't
     // auto-approve.

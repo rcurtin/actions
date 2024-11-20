@@ -2,31 +2,31 @@
 var __createBinding =
   (this && this.__createBinding) ||
   (Object.create
-    ? function(o, m, k, k2) {
+    ? function (o, m, k, k2) {
         if (k2 === undefined) k2 = k;
         Object.defineProperty(o, k2, {
           enumerable: true,
-          get: function() {
+          get: function () {
             return m[k];
-          }
+          },
         });
       }
-    : function(o, m, k, k2) {
+    : function (o, m, k, k2) {
         if (k2 === undefined) k2 = k;
         o[k2] = m[k];
       });
 var __setModuleDefault =
   (this && this.__setModuleDefault) ||
   (Object.create
-    ? function(o, v) {
+    ? function (o, v) {
         Object.defineProperty(o, "default", { enumerable: true, value: v });
       }
-    : function(o, v) {
+    : function (o, v) {
         o["default"] = v;
       });
 var __importStar =
   (this && this.__importStar) ||
-  function(mod) {
+  function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
     if (mod != null)
@@ -38,15 +38,15 @@ var __importStar =
   };
 var __awaiter =
   (this && this.__awaiter) ||
-  function(thisArg, _arguments, P, generator) {
+  function (thisArg, _arguments, P, generator) {
     function adopt(value) {
       return value instanceof P
         ? value
-        : new P(function(resolve) {
+        : new P(function (resolve) {
             resolve(value);
           });
     }
-    return new (P || (P = Promise))(function(resolve, reject) {
+    return new (P || (P = Promise))(function (resolve, reject) {
       function fulfilled(value) {
         try {
           step(generator.next(value));
@@ -73,25 +73,25 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(require("@actions/core"));
 const github = __importStar(require("@actions/github"));
 function run() {
-  return __awaiter(this, void 0, void 0, function*() {
+  return __awaiter(this, void 0, void 0, function* () {
     try {
       const issueMessage = core.getInput("issue-message");
       const prMessage = core.getInput("pr-message");
       if (!issueMessage && !prMessage) {
         throw new Error(
-          "Action must have at least one of issue-message or pr-message set"
+          "Action must have at least one of issue-message or pr-message set",
         );
       }
       // Get client and context
       const client = github.getOctokit(
-        core.getInput("repo-token", { required: true })
+        core.getInput("repo-token", { required: true }),
       );
       const context = github.context;
       // Do nothing if its not a pr or issue
       const isIssue = !!context.payload.issue;
       if (!isIssue && !context.payload.pull_request) {
         console.log(
-          "The event that triggered this action was not a pull request or issue, skipping."
+          "The event that triggered this action was not a pull request or issue, skipping.",
         );
         return;
       }
@@ -109,7 +109,7 @@ function run() {
           issue.owner,
           issue.repo,
           sender,
-          issue.number
+          issue.number,
         );
       } else {
         firstContribution = yield isFirstPull(
@@ -117,7 +117,7 @@ function run() {
           issue.owner,
           issue.repo,
           sender,
-          issue.number
+          issue.number,
         );
       }
       if (!firstContribution) {
@@ -138,7 +138,7 @@ function run() {
           owner: issue.owner,
           repo: issue.repo,
           issue_number: issue.number,
-          body: message
+          body: message,
         });
       } else {
         yield client.rest.pulls.createReview({
@@ -146,7 +146,7 @@ function run() {
           repo: issue.repo,
           pull_number: issue.number,
           body: message,
-          event: "COMMENT"
+          event: "COMMENT",
         });
       }
     } catch (error) {
@@ -156,12 +156,12 @@ function run() {
   });
 }
 function isFirstIssue(client, owner, repo, sender, curIssueNumber) {
-  return __awaiter(this, void 0, void 0, function*() {
+  return __awaiter(this, void 0, void 0, function* () {
     const { status, data: issues } = yield client.rest.issues.listForRepo({
       owner: owner,
       repo: repo,
       creator: sender,
-      state: "all"
+      state: "all",
     });
     if (status !== 200) {
       throw new Error(`Received unexpected API status code ${status}`);
@@ -180,17 +180,17 @@ function isFirstIssue(client, owner, repo, sender, curIssueNumber) {
 // No way to filter pulls by creator
 function isFirstPull(client, owner, repo, sender, curPullNumber, page = 1) {
   var _a;
-  return __awaiter(this, void 0, void 0, function*() {
+  return __awaiter(this, void 0, void 0, function* () {
     // Provide console output if we loop for a while.
     console.log(
-      `Checking page ${page} for PR #${curPullNumber} with sender ${sender}...`
+      `Checking page ${page} for PR #${curPullNumber} with sender ${sender}...`,
     );
     const { status, data: pulls } = yield client.rest.pulls.list({
       owner: owner,
       repo: repo,
       per_page: 100,
       page: page,
-      state: "all"
+      state: "all",
     });
     if (status !== 200) {
       throw new Error(`Received unexpected API status code ${status}`);
@@ -202,7 +202,7 @@ function isFirstPull(client, owner, repo, sender, curPullNumber, page = 1) {
       const login =
         (_a = pull.user) === null || _a === void 0 ? void 0 : _a.login;
       console.log(
-        `Check PR #${pull.number}, which was done by ${login}.  (Looking for ${sender}, ${pull.number} < ${curPullNumber}, and merge ${pull.merged}.)`
+        `Check PR #${pull.number}, which was done by ${login}.  (Looking for ${sender}, ${pull.number} < ${curPullNumber}, and merge ${pull.merged}.)`,
       );
       if (
         login === sender &&
@@ -219,7 +219,7 @@ function isFirstPull(client, owner, repo, sender, curPullNumber, page = 1) {
       repo,
       sender,
       curPullNumber,
-      page + 1
+      page + 1,
     );
   });
 }
