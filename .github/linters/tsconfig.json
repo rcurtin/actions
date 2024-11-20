@@ -4,6 +4,14 @@
   "compilerOptions": {
     "noEmit": true
   },
-  "include": ["../../auto-approve/__tests__/**/*", "../../auto-approve/src/**/*"],
-  "exclude": ["../../auto-approve/dist", "../../auto-approve/node_modules", "../../auto-approve/coverage", "*.json"]
+  "include": [
+    "../../auto-approve/__tests__/**/*",
+    "../../auto-approve/src/**/*"
+  ],
+  "exclude": [
+    "../../auto-approve/dist",
+    "../../auto-approve/node_modules",
+    "../../auto-approve/coverage",
+    "*.json"
+  ]
 }
