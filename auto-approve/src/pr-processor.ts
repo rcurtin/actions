@@ -118,6 +118,7 @@ export class PRProcessor {
     }
 
     const approvalAuthors: Set<string> = new Set<string>()
+    const requestChangesAuthors: Set<string> = new Set<string>()
     for (const review of prReviews.values()) {
       // If the review is not at least 24 hours old, we don't care.
       const submittedAtString: string = review.submitted_at as string
@@ -146,9 +147,9 @@ export class PRProcessor {
       }
 
       // Check to see if this is an approval.
-      if (review.state !== 'APPROVED') {
+      if (review.state !== 'APPROVED' && review.state !== 'CHANGES_REQUESTED') {
         console.log(
-          `PR review on ${pr.number} (${review.html_url}) is not an approval, skipping.`
+          `PR review on ${pr.number} (${review.html_url}) is not an approval or a change request, skipping.`
         )
         continue
       }
@@ -175,12 +176,25 @@ export class PRProcessor {
       }
 
       // Add to the list of review authors we have seen.
-      approvalAuthors.add(review.user.login)
+      if (review.state == 'APPROVED') {
+        // Remove the author from the list of authors who requested changes,
+        // since they have now approved.
+        requestChangesAuthors.delete(review.user.login)
+        approvalAuthors.add(review.user.login)
+      } else {
+        requestChangesAuthors.add(review.user.login)
+      }
     }
 
     console.log(
       `PR ${pr.number} has sufficiently old approvals from: ${Array.from(approvalAuthors)}.`
     )
+
+    // If there are any outstanding change requests from maintainers, don't
+    // auto-approve.
+    if (requestChangesAuthors.size > 0) {
+      return [] as string[]
+    }
 
     const result = new Set<string>([
       ...approvalAuthors,
