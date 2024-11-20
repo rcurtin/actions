@@ -1,7 +1,5 @@
 FROM node:20.10-buster-slim
 
-USER root
-RUN useradd -m node
 WORKDIR /home/node/
 USER node
 COPY . .
