@@ -1,15 +1,15 @@
 "use strict";
 var __awaiter =
   (this && this.__awaiter) ||
-  function(thisArg, _arguments, P, generator) {
+  function (thisArg, _arguments, P, generator) {
     function adopt(value) {
       return value instanceof P
         ? value
-        : new P(function(resolve) {
+        : new P(function (resolve) {
             resolve(value);
           });
     }
-    return new (P || (P = Promise))(function(resolve, reject) {
+    return new (P || (P = Promise))(function (resolve, reject) {
       function fulfilled(value) {
         try {
           step(generator.next(value));
@@ -34,15 +34,15 @@ var __awaiter =
   };
 var __generator =
   (this && this.__generator) ||
-  function(thisArg, body) {
+  function (thisArg, body) {
     var _ = {
         label: 0,
-        sent: function() {
+        sent: function () {
           if (t[0] & 1) throw t[1];
           return t[1];
         },
         trys: [],
-        ops: []
+        ops: [],
       },
       f,
       y,
@@ -51,13 +51,13 @@ var __generator =
     return (
       (g = { next: verb(0), throw: verb(1), return: verb(2) }),
       typeof Symbol === "function" &&
-        (g[Symbol.iterator] = function() {
+        (g[Symbol.iterator] = function () {
           return this;
         }),
       g
     );
     function verb(n) {
-      return function(v) {
+      return function (v) {
         return step([n, v]);
       };
     }
@@ -72,8 +72,8 @@ var __generator =
                 op[0] & 2
                   ? y["return"]
                   : op[0]
-                  ? y["throw"] || ((t = y["return"]) && t.call(y), 0)
-                  : y.next) &&
+                    ? y["throw"] || ((t = y["return"]) && t.call(y), 0)
+                    : y.next) &&
               !(t = t.call(y, op[1])).done)
           )
             return t;
@@ -136,7 +136,7 @@ exports.__esModule = true;
 var core = require("@actions/core");
 var github = require("@actions/github");
 function run() {
-  return __awaiter(this, void 0, void 0, function() {
+  return __awaiter(this, void 0, void 0, function () {
     var issueMessage,
       prMessage,
       client,
@@ -148,7 +148,7 @@ function run() {
       message,
       issueType,
       error_1;
-    return __generator(this, function(_a) {
+    return __generator(this, function (_a) {
       switch (_a.label) {
         case 0:
           _a.trys.push([0, 9, , 10]);
@@ -156,17 +156,17 @@ function run() {
           prMessage = core.getInput("pr-message");
           if (!issueMessage && !prMessage) {
             throw new Error(
-              "Action must have at least one of issue-message or pr-message set"
+              "Action must have at least one of issue-message or pr-message set",
             );
           }
           client = github.getOctokit(
-            core.getInput("repo-token", { required: true })
+            core.getInput("repo-token", { required: true }),
           );
           context = github.context;
           isIssue = !!context.payload.issue;
           if (!isIssue && !context.payload.pull_request) {
             console.log(
-              "The event that triggered this action was not a pull request or issue, skipping."
+              "The event that triggered this action was not a pull request or issue, skipping.",
             );
             return [2 /*return*/];
           }
@@ -181,7 +181,7 @@ function run() {
           if (!isIssue) return [3 /*break*/, 2];
           return [
             4 /*yield*/,
-            isFirstIssue(client, issue.owner, issue.repo, sender, issue.number)
+            isFirstIssue(client, issue.owner, issue.repo, sender, issue.number),
           ];
         case 1:
           firstContribution = _a.sent();
@@ -189,7 +189,7 @@ function run() {
         case 2:
           return [
             4 /*yield*/,
-            isFirstPull(client, issue.owner, issue.repo, sender, issue.number)
+            isFirstPull(client, issue.owner, issue.repo, sender, issue.number),
           ];
         case 3:
           firstContribution = _a.sent();
@@ -212,7 +212,7 @@ function run() {
               " to " +
               issueType +
               " " +
-              issue.number
+              issue.number,
           );
           if (!isIssue) return [3 /*break*/, 6];
           return [
@@ -221,8 +221,8 @@ function run() {
               owner: issue.owner,
               repo: issue.repo,
               issue_number: issue.number,
-              body: message
-            })
+              body: message,
+            }),
           ];
         case 5:
           _a.sent();
@@ -235,8 +235,8 @@ function run() {
               repo: issue.repo,
               pull_number: issue.number,
               body: message,
-              event: "COMMENT"
-            })
+              event: "COMMENT",
+            }),
           ];
         case 7:
           _a.sent();
@@ -254,9 +254,9 @@ function run() {
   });
 }
 function isFirstIssue(client, owner, repo, sender, curIssueNumber) {
-  return __awaiter(this, void 0, void 0, function() {
+  return __awaiter(this, void 0, void 0, function () {
     var _a, status, issues, _i, issues_1, issue;
-    return __generator(this, function(_b) {
+    return __generator(this, function (_b) {
       switch (_b.label) {
         case 0:
           return [
@@ -265,8 +265,8 @@ function isFirstIssue(client, owner, repo, sender, curIssueNumber) {
               owner: owner,
               repo: repo,
               creator: sender,
-              state: "all"
-            })
+              state: "all",
+            }),
           ];
         case 1:
           (_a = _b.sent()), (status = _a.status), (issues = _a.data);
@@ -293,9 +293,9 @@ function isFirstPull(client, owner, repo, sender, curPullNumber, page) {
   if (page === void 0) {
     page = 1;
   }
-  return __awaiter(this, void 0, void 0, function() {
+  return __awaiter(this, void 0, void 0, function () {
     var _b, status, pulls, _i, pulls_1, pull, login;
-    return __generator(this, function(_c) {
+    return __generator(this, function (_c) {
       switch (_c.label) {
         case 0:
           // Provide console output if we loop for a while.
@@ -307,8 +307,8 @@ function isFirstPull(client, owner, repo, sender, curPullNumber, page) {
               repo: repo,
               per_page: 100,
               page: page,
-              state: "all"
-            })
+              state: "all",
+            }),
           ];
         case 1:
           (_b = _c.sent()), (status = _b.status), (pulls = _b.data);
@@ -332,7 +332,7 @@ function isFirstPull(client, owner, repo, sender, curPullNumber, page) {
           }
           return [
             4 /*yield*/,
-            isFirstPull(client, owner, repo, sender, curPullNumber, page + 1)
+            isFirstPull(client, owner, repo, sender, curPullNumber, page + 1),
           ];
         case 2:
           return [2 /*return*/, _c.sent()];

@@ -64,5 +64,4 @@ jobs:
         uses: ./auto-approve/
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          approval-message:
-            'Second approval provided automatically after 24 hours. :+1:'
+          approval-message: "Second approval provided automatically after 24 hours. :+1:"
