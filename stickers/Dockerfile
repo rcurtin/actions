@@ -1,8 +1,9 @@
 FROM node:20.10-buster-slim
 
 WORKDIR /home/node/
-USER node
 COPY . .
+RUN chown -R node:node /home/node/
+USER node
 
 RUN npm install --production
 
